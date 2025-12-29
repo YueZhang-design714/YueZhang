@@ -32,6 +32,14 @@ button{
   margin-top:15px;
 }
 .word{font-size:24px;font-weight:bold}
+.list{
+  background:#fff;
+  padding:10px;
+  margin-top:20px;
+  border-radius:8px;
+}
+.list h3{margin-top:0}
+.list div{padding:4px 0;border-bottom:1px solid #eee}
 </style>
 </head>
 <body>
@@ -39,19 +47,41 @@ button{
 <h1>📘 只认脸熟</h1>
 
 <input id="word" placeholder="输入或粘贴单词">
-<button onclick="gen()">生成</button>
+<button onclick="gen()">生成并保存</button>
 
 <div id="box"></div>
 
+<div class="list">
+  <h3>📌 已保存单词</h3>
+  <div id="saved"></div>
+</div>
+
 <script>
+let words = JSON.parse(localStorage.getItem("words") || "[]");
+
+function saveWord(w){
+  if(!words.includes(w)){
+    words.push(w);
+    localStorage.setItem("words", JSON.stringify(words));
+  }
+  renderList();
+}
+
+function renderList(){
+  document.getElementById("saved").innerHTML =
+    words.map(w=>`<div>${w}</div>`).join("");
+}
+
 function speak(w){
  let u=new SpeechSynthesisUtterance(w);
  u.lang="en-GB";
  speechSynthesis.speak(u);
 }
+
 function gen(){
  let w=document.getElementById("word").value.trim();
  if(!w)return;
+ saveWord(w);
  document.getElementById("box").innerHTML=`
  <div class="card">
  <div class="word">${w}</div>
@@ -59,6 +89,8 @@ function gen(){
  <p>例句：This is an example with "${w}".</p>
  </div>`;
 }
+
+renderList();
 </script>
 
 </body>
