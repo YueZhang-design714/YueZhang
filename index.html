@@ -1,1 +1,65 @@
-hello
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>只认脸熟 · 私人单词本</title>
+<style>
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",
+  "PingFang SC","Microsoft YaHei",sans-serif;
+  background:#f7f7f7;
+  max-width:480px;
+  margin:auto;
+  padding:20px;
+}
+h1{text-align:center}
+input,button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  font-size:16px;
+}
+button{
+  background:#4f6ef7;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+}
+.card{
+  background:#fff;
+  padding:15px;
+  border-radius:8px;
+  margin-top:15px;
+}
+.word{font-size:24px;font-weight:bold}
+</style>
+</head>
+<body>
+
+<h1>📘 只认脸熟</h1>
+
+<input id="word" placeholder="输入或粘贴单词">
+<button onclick="gen()">生成</button>
+
+<div id="box"></div>
+
+<script>
+function speak(w){
+ let u=new SpeechSynthesisUtterance(w);
+ u.lang="en-GB";
+ speechSynthesis.speak(u);
+}
+function gen(){
+ let w=document.getElementById("word").value.trim();
+ if(!w)return;
+ document.getElementById("box").innerHTML=`
+ <div class="card">
+ <div class="word">${w}</div>
+ <button onclick="speak('${w}')">🔊 听发音</button>
+ <p>例句：This is an example with "${w}".</p>
+ </div>`;
+}
+</script>
+
+</body>
+</html>
